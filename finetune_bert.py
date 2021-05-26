@@ -6,6 +6,7 @@ import dgl
 import torch.utils.data as Data
 from ignite.engine import Events, create_supervised_evaluator, create_supervised_trainer, Engine
 from ignite.metrics import Accuracy, Loss
+from ignite.contrib.handlers import ProgressBar
 import numpy as np
 import os
 from datetime import datetime
@@ -188,6 +189,8 @@ def log_training_results(trainer):
         )
         log_training_results.best_val_acc = val_acc
 
+pbar = ProgressBar(persist=True, bar_format="")
+pbar.attach(trainer, ['loss'])
         
 log_training_results.best_val_acc = 0
 trainer.run(loader['train'], max_epochs=nb_epochs)
